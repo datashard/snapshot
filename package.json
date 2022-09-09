@@ -41,14 +41,14 @@
     "test": "npm run unit",
     "unit": "mocha src/*-spec.js",
     "unused-deps": "dependency-check --unused --no-dev . --entry src/add-initial-snapshot-file.js",
-    "postinstall": "node src/add-initial-snapshot-file.js",
+    "postinstall": "echo 'no postinstall script'",
     "semantic-release": "semantic-release",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run"
   },
   "devDependencies": {
     "ban-sensitive-files": "1.9.15",
-    "cypress": "3.8.3",
+    "cypress": "10.6.0",
     "debug": "3.2.7",
     "dependency-check": "2.10.1",
     "deps-ok": "1.4.1",
@@ -67,6 +67,7 @@
     "js-beautify": "1.13.13",
     "lazy-ass": "1.6.0",
     "snap-shot-compare": "3.0.0",
+    "snap-shot-it": "7.9.6",
     "snap-shot-store": "1.2.3"
   }
 }

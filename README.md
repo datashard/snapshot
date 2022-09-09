@@ -91,7 +91,7 @@ module.exports = {
 
 If you change the site values, the saved snapshot will no longer match, throwing an error
 
-![Snapshot mismatch](img/snapshot-mismatch.png)
+![Snapshot mismatch](.github/assets/snapshot-mismatch.png)
 
 Click on the `SNAPSHOT` step in the Command Log to see expected and current value printed in the DevTools.
 

@@ -38,8 +38,9 @@ const store_snapshot = (store, props = { value, name, path, raiser }) => {
     .join("_")
     .replace(/ /gi, "-")
     .replace(/\//gi, "-");
-  const snapshotPath = Cypress.config("snapshot").snapshotPath || "cypress/snapshots"
-  const expectedPath = path.join(snapshotPath, `${fileName}.json`);
+  const snapshotPath = props.path || Cypress.config("snapshot").snapshotPath || "cypress/snapshots"
+  // console.log(snapshotPath)
+  const expectedPath = path.join(snapshotPath, `${fileName}.json`); 
   // console.log("\x1b[31m%s\x1b[30m", "file: path", expectedPath);
   cy.task("readFileMaybe", expectedPath).then((exist) => {
     // console.log("\x1b[35m%s\x1b[30m", "file: exists", exist); 
@@ -105,13 +106,13 @@ const get_snapshot_name = (test, custom_name) => {
   return names;
 };
 
-module.exports = (value, step, { humanName, snapshotPath, json } = {}) => {
-  const snapshotName = get_snapshot_name(Cypress.currentTest, humanName || step);
+module.exports = (value, step, { snapshotName, snapshotPath, json } = {}) => {
+  const name = get_snapshot_name(Cypress.currentTest, snapshotName || step);
   const serializer = pickSerializer(json, value);
   const serialized = serializer(value);
   const store = newStore(serialized || {});
   set_snapshot(store, {
-    snapshotName,
+    snapshotName: name,
     snapshotPath,
     serialized,
     value,

@@ -17,7 +17,7 @@ module.exports = {
   snapshots: {
     compareValues,
   },
-  config: require("./config"),
+
   functions: {
     register: require("./functions/register"),
     tasks: require("./functions/addTasks")

@@ -2,13 +2,9 @@ const serializeDomElement = require("../serializers/serializeDomElement");
 const serializeToHTML = require("../serializers/serializeToHTML");
 const compareValues = require("./compareValues");
 const { initStore } = require("snap-shot-store");
-// const itsName = require("its-name");
 const path = require("path");
 const identity = (x) => x;
 
-// Value = the JSON we want to store/compare
-// name = the Human Readable name of this Snapshot
-// json = decides if we convert DOM elements into JSON when storing in the snapshot file
 const pickSerializer = (asJson, value) => {
   if (Cypress.dom.isJquery(value)) {
     return asJson ? serializeDomElement : serializeToHTML;
@@ -38,28 +34,32 @@ const store_snapshot = (store, props = { value, name, path, raiser }) => {
     .join("_")
     .replace(/ /gi, "-")
     .replace(/\//gi, "-");
-  const snapshotPath = props.path || Cypress.config("snapshot").snapshotPath || "cypress/snapshots"
-  // console.log(snapshotPath)
-  const expectedPath = path.join(snapshotPath, `${fileName}.json`); 
-  // console.log("\x1b[31m%s\x1b[30m", "file: path", expectedPath);
+  const snapshotPath =
+    props.path ||
+    Cypress.config("snapshot").snapshotPath ||
+    "cypress/snapshots";
+
+  const expectedPath = path.join(snapshotPath, `${fileName}.json`);
   cy.task("readFileMaybe", expectedPath).then((exist) => {
-    // console.log("\x1b[35m%s\x1b[30m", "file: exists", exist); 
-    if(exist){
-      props.raiser({value: props.value, expected: JSON.parse(exist)})
+    if (exist) {
+      props.raiser({ value: props.value, expected: JSON.parse(exist) });
     } else {
-      cy.writeFile(expectedPath, JSON.stringify(props.value))
+      cy.writeFile(expectedPath, JSON.stringify(props.value));
     }
   });
 };
 
-const set_snapshot = (store, { snapshotName, snapshotPath, serialized, value }) => {
-  if (!store) return; // no store was initialized
+const set_snapshot = (
+  store,
+  { snapshotName, snapshotPath, serialized, value }
+) => {
+  if (!store) return;
 
   const message = Cypress._.last(snapshotName);
   console.log("Current Snapshot name", snapshotName);
 
   const devToolsLog = { $el: serialized };
-  // console.log({snapshotName, serialized, value})
+
   if (Cypress.dom.isJquery(value)) {
     devToolsLog.$el = value;
   }
@@ -98,27 +98,33 @@ const set_snapshot = (store, { snapshotName, snapshotPath, serialized, value }) 
 const get_test_name = (test) => test.titlePath;
 const get_snapshot_name = (test, custom_name) => {
   const names = get_test_name(test);
-  // const key = names.join(" - ");
-  const index = custom_name || get_snapshot_key(key);
+
+  const index = custom_name;
   names.push(String(index));
-  // console.log("names", names)
-  if(custom_name) return [custom_name]
+
+  if (custom_name) return [custom_name];
   return names;
 };
 
-module.exports = (value, step, { snapshotName, snapshotPath, json } = {}) => {
-  const name = get_snapshot_name(Cypress.currentTest, snapshotName || step);
-  const serializer = pickSerializer(json, value);
+module.exports = (value, step, options) => {
+  if (typeof step === "object") options = step;
+  if (typeof value !== "object" || Array.isArray(value))
+    value = { data: value };
+  console.log("value", value);
+
+  const name = get_snapshot_name(
+    Cypress.currentTest,
+    options.snapshotName || step
+  );
+  const serializer = pickSerializer(options.json, value);
   const serialized = serializer(value);
   const store = newStore(serialized || {});
+
+  console.log({ step, options });
   set_snapshot(store, {
     snapshotName: name,
-    snapshotPath,
+    snapshotPath: options.snapshotPath,
     serialized,
     value,
   });
-  // return undefined;
 };
-
-
-

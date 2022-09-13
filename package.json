@@ -1,7 +1,7 @@
 {
-  "name": "@cypress/snapshot",
+  "name": "cypress-snapshot",
   "description": "Adds value / object / DOM element snapshot testing support to Cypress test runner",
-  "version": "0.0.0-development",
+  "version": "1.0.0",
   "author": "Gleb Bahmutov <gleb@cypress.io>",
   "bugs": "https://github.com/cypress-io/snapshot/issues",
   "engines": {
@@ -61,13 +61,10 @@
   },
   "dependencies": {
     "@wildpeaks/snapshot-dom": "1.6.0",
-    "am-i-a-dependency": "1.1.2",
     "check-more-types": "2.24.0",
-    "its-name": "1.0.0",
     "js-beautify": "1.13.13",
     "lazy-ass": "1.6.0",
     "snap-shot-compare": "3.0.0",
-    "snap-shot-it": "7.9.6",
     "snap-shot-store": "1.2.3"
   }
 }

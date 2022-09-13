@@ -8,90 +8,70 @@
 [![semantic-release][semantic-image] ][semantic-url]
 [![renovate-app badge][renovate-badge]][renovate-app]
 
-## Note
-
-Please take a look at a few other Cypress snapshot plugins: [cypress-plugin-snapshots](https://github.com/meinaart/cypress-plugin-snapshots), [cypress-image-snapshot](https://github.com/palmerhq/cypress-image-snapshot).
+> **Note** \
+> \
+> Please take a look at a few other Cypress snapshot plugins:
+>
+> - [cypress-plugin-snapshots](https://github.com/meinaart/cypress-plugin-snapshots)
+> - [cypress-image-snapshot](https://github.com/palmerhq/cypress-image-snapshot).
 
 ## Install
 
-Requires [Node](https://nodejs.org/en/) version 6 or above.
+Requires [Node](https://nodejs.org/en/) version 10 or above.
 
 ```sh
 npm install --save-dev @cypress/snapshot
 ```
 
-## Use
+## Import
 
 After installing, add the following to your `cypress/support/commands.js` file
 
 ```js
-require('@cypress/snapshot').register()
+require("@cypress/snapshot").register();
 ```
-
 This registers a new command to create new snapshot or compare value to old snapshot
 
-```js
-describe('my tests', () => {
-  it('works', () => {
-    cy.log('first snapshot')
-    cy.wrap({ foo: 42 }).snapshot()
-    cy.log('second snapshot')
-    cy.wrap({ bar: 101 }).snapshot()
-  })
-})
+and add the following to your `cypress.config.js`
 
-describe('focused input field', () => {
-  it('is empty and then typed into', () => {
-    cy.visit('http://todomvc.com/examples/react/')
-    cy
-      .focused()
-      .snapshot('initial')
-      .type('eat healthy breakfast')
-      .snapshot('after typing')
-  })
-})
+```js
+  e2e: {
+    setupNodeEvents(on, config) {
+      require("@cypress/snapshot").tasks(on, config)
+    },
 ```
 
-By default, the snapshot object can be found in file `snapshots.js`. In the above case it would look something like this
+**Note:** `@cypress/snapshot` **requires** the `readFileMaybe` plugin to be included, which can be easily done using the code above
+
+
+# Usage
+
+Currently, if you want to take more than one snapshot, you need to pass a Step Name to prevent overwrites / test failures
 
 ```js
-module.exports = {
-  "focused input field": {
-    "is empty and then typed into": {
-      "initial": {
-        "tagName": "input",
-        "attributes": {
-          "class": "new-todo",
-          "placeholder": "What needs to be done?",
-          "value": ""
-        }
-      },
-      "after typing": {
-        "tagName": "input",
-        "attributes": {
-          "class": "new-todo",
-          "placeholder": "What needs to be done?",
-          "value": "eat healthy breakfast"
-        }
-      }
-    }
-  },
-  "my tests": {
-    "works": {
-      "1": {
-        "foo": 42
-      },
-      "2": {
-        "bar": 101
-      }
-    }
-  }
-}
+describe("my tests", () => {
+  it("works", () => {
+    cy.log("first snapshot");
+    cy.wrap({ foo: 42 }).snapshot("foo");
+    cy.log("second snapshot");
+    cy.wrap({ bar: 101 }).snapshot("bar");
+  });
+});
+```
+
+In the above case, you can find the stored snapshot in their own files, mentioned above them
+
+```json
+// cypress/snapshots/my-tests-works-foo.json
+{"foo": 42}
+// cypress/snapshots/my-tests-works-bar.json
+{"bar": 101}
 ```
 
 If you change the site values, the saved snapshot will no longer match, throwing an error
 
-![Snapshot mismatch](.github/assets/snapshot-mismatch.png)
+( picture taken from `cypress/snapshots/Arrays.json`)
+![Snapshot mismatch](.github/assets/updated-mismatch.png)
 
 Click on the `SNAPSHOT` step in the Command Log to see expected and current value printed in the DevTools.
 
@@ -101,45 +81,61 @@ You can control snapshot comparison and behavior through a few options.
 
 ```js
 cy.get(...).snapshot({
-  name: 'human snapshot name', // to use in the snapshot file
-  json: false                  // convert DOM elements into JSON
-                               // when storing in the snapshot file
+  snapshotName: 'Snapshot Name', // to use as a File Name
+  snapshotPath: 'cypress/not_snapshots', // where to save the Snapshot
+  json: false                  // convert DOM elements into JSON 
+})                            // when storing in the snapshot file
+
+// will save as 
+// cypress/not_snapshots/Snapshot-Name.json
+```
+
+You can also pass a "Step Name" to the Function
+
+```js
+cy.get(...).snapshot("Intercepted API Request")
+// will save as 
+// cypress/snapshots/<context>-<describe>-<it>-Intercepted-API-Request.json
+// to prevent duplications
+```
+
+or both
+
+```js
+cy.get(...).snapshot("Intercepted API Request", {
+  snapshotPath: "cypress/snapshots/api",
+  snapshotName: "first_intercept" 
 })
+
+// will save as 
+// cypress/snapshots/api/first_intercept.json
 ```
 
 ### Configuration
 
 This module provides some configuration options:
 
-#### useRelativeSnapshots
-Set to true in order to store your snapshots for each test run next to the inital test caller rather
-than at the base working directory.
-
-**Note:** requires the `readFileMaybe` plugin to be configured see https://on.cypress.io/task#Read-a-file-that-might-not-exist
-
-#### snapshotFileName
-Set to a string to name your snapshot something other than 'snapshots.js'
-
-#### Usage
-Set the configuration options as part of the Cypress config.
-See https://docs.cypress.io/guides/references/configuration.html
+#### snapshotPath
+Sets the default Path for saving Snapshots (default: `cypress/snapshots`)
 
 ## Debugging
 
 To debug this module run with environment variable `DEBUG=@cypress/snapshot`
 
+# 
+
 ### Small print
 
-Author: Gleb Bahmutov &lt;gleb@cypress.io&gt; &copy; Cypress.io 2017
+Author: Gleb Bahmutov &lt;gleb@cypress.io&gt; &amp;  Joshua D. &lt;[cypress@lio.cat](mailto:cypress@lio.cat)&gt; &copy; Cypress.io 2017-2022
+<br>
+License: MIT - do anything with the code, but don't blame us if it does not work.
 
-License: MIT - do anything with the code, but don't blame u if it does not work.
-
-Support: if you find any problems with this module, email / tweet /
+Support: If you find any problems with this module, email / tweet /
 [open issue](https://github.com/cypress-io/snapshot/issues) on Github
 
 ## MIT License
 
-Copyright (c) 2017 Cypress.io &lt;gleb@cypress.io&gt;
+Copyright (c) 2017-2022 Cypress.io &lt;hello@cypress.io&gt;
 
 Permission is hereby granted, free of charge, to any person
 obtaining a copy of this software and associated documentation

@@ -3,28 +3,31 @@
 describe("@cypress/snapshot", () => {
   context("simple types", () => {
     it("works with objects", () => {
-      cy.fixture("File2").snapshot(
-        "Compare Files"
-        ,{
-          snapshotPath: "cypress/snapshots",
-          snapshotName: "Comparison"
-        }
-      );
+      cy.fixture("File2").snapshot({
+        snapshotPath: "cypress/snapshots",
+        snapshotName: "Objects",
+      });
     });
 
-    // it("works with numbers", () => {
-    // console.log(cy.wrap(42))
-    // cy.wrap(42).snapshot();
-    // });
+    it("works with numbers", () => {
+      cy.wrap(42).snapshot({
+        snapshotPath: "cypress/snapshots",
+        snapshotName: "Numbers",
+      });
+    });
 
-    // it("works with strings", () => {
-    // console.log(cy.wrap("foo-bar"))
-    // cy.wrap("foo-bar").snapshot();
-    // });
+    it("works with strings", () => {
+      cy.wrap("foo-bar").snapshot({
+        snapshotPath: "cypress/snapshots",
+        snapshotName: "Strings",
+      });
+    });
 
-    // it("works with arrays", () => {
-    // console.log(cy.wrap([1, 2, 3]))
-    // cy.wrap([1, 2, 3]).snapshot();
-    // });
+    it("works with arrays", () => {
+      cy.wrap([1, 2, 3]).snapshot({
+        snapshotPath: "cypress/snapshots",
+        snapshotName: "Arrays",
+      });
+    });
   });
 });

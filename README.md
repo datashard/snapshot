@@ -126,7 +126,7 @@ To debug this module run with environment variable `DEBUG=@cypress/snapshot`
 
 ### Small print
 
-Author: Gleb Bahmutov &lt;gleb@cypress.io&gt; &amp;  Joshua D. &lt;[cypress@lio.cat](mailto:cypress@lio.cat)&gt; &copy; Cypress.io 2017-2022
+Author: Gleb Bahmutov &lt;gleb@cypress.io&gt; &amp;  Joshua D. &lt;[data@shard.wtf](mailto:data@shard.wtf)&gt; &copy; Cypress.io 2017-2022
 <br>
 License: MIT - do anything with the code, but don't blame us if it does not work.
 

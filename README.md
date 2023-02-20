@@ -2,25 +2,23 @@
 
 > Adds value / object / DOM element snapshot testing support to Cypress test runner
 
-[![NPM][npm-icon] ][npm-url]
+<details>
+<summary>Changes between <code>@datashard/snapshot</code> and <code>@cypress/snapshot</code></summary>
+<br>
+They're mostly the same, as this is a fork of the Latter, though it's not a drop-in replacement.
 
-[![Build status][ci-image] ][ci-url]
-[![semantic-release][semantic-image] ][semantic-url]
-[![renovate-app badge][renovate-badge]][renovate-app]
+Unlike `@cypress/snapshot`, this saves snapshots in their own files with a sensible default and strives to have ongoing Support for future Cypress Versions
 
-> **Note** \
-> \
-> Please take a look at a few other Cypress snapshot plugins:
->
-> - [cypress-plugin-snapshots](https://github.com/meinaart/cypress-plugin-snapshots)
-> - [cypress-image-snapshot](https://github.com/palmerhq/cypress-image-snapshot).
+</details>
+
+<!-- [![NPM][npm-icon] ][npm-url] -->
 
 ## Install
 
 Requires [Node](https://nodejs.org/en/) version 10 or above.
 
 ```sh
-npm install --save-dev @cypress/snapshot
+npm install --save-dev @datashard/snapshot
 ```
 
 ## Import
@@ -28,7 +26,7 @@ npm install --save-dev @cypress/snapshot
 After installing, add the following to your `cypress/support/commands.js` file
 
 ```js
-require("@cypress/snapshot").register();
+require("@datashard/snapshot").register();
 ```
 
 This registers a new command to create new snapshot or compare value to old snapshot
@@ -38,11 +36,13 @@ and add the following to your `cypress.config.js`
 ```js
   e2e: {
     setupNodeEvents(on, config) {
-      require("@cypress/snapshot").tasks(on, config)
+      require("@datashard/snapshot").tasks(on, config)
     },
 ```
 
-**Note:** `@cypress/snapshot` **requires** the `readFileMaybe` plugin to be included, which can be easily done using the code above
+> **Note** \
+> \
+> `@datashard/snapshot` **requires** the `readFileMaybe` plugin to be included, which can be easily done using the code above
 
 # Usage
 
@@ -63,14 +63,14 @@ In the above case, you can find the stored snapshot in their own files, mentione
 
 ```json
 // cypress/snapshots/my-tests-works-foo.json
-{"foo": 42}
+{ "foo": 42 }
 // cypress/snapshots/my-tests-works-bar.json
-{"bar": 101}
+{ "bar": 101 }
 ```
 
 If you change the site values, the saved snapshot will no longer match, throwing an error
 
-( picture taken from `cypress/snapshots/Arrays.json`)
+(picture taken from `cypress/snapshots/Arrays.json`)
 ![Snapshot mismatch](.github/assets/updated-mismatch.png)
 
 Click on the `SNAPSHOT` step in the Command Log to see expected and current value printed in the DevTools.
@@ -119,24 +119,23 @@ This module provides some configuration options:
 
 Sets the default Path for saving Snapshots (default: `cypress/snapshots`)
 
-## Debugging
-
-To debug this module run with environment variable `DEBUG=@cypress/snapshot`
-
 #
 
 ### Small print
 
-Author: Gleb Bahmutov &lt;gleb@cypress.io&gt; &amp; Joshua D. &lt;[data@shard.wtf](mailto:data@shard.wtf)&gt; &copy; Cypress.io 2017-2022
+Authors:
+
+- Joshua &lt;[data@shard.wtf](mailto:data@shard.wtf)&gt;
+- Gleb Bahmutov &lt;gleb@cypress.io&gt;
+
 <br>
 License: MIT - do anything with the code, but don't blame us if it does not work.
 
-Support: If you find any problems with this module, email / tweet /
-[open issue](https://github.com/cypress-io/snapshot/issues) on Github
+Support: If you find any problems with this module [open an issue](https://github.com/cypress-io/snapshot/issues) on Github
 
 ## MIT License
 
-Copyright (c) 2017-2022 Cypress.io &lt;hello@cypress.io&gt;
+Copyright (c) 2017-2022 Cypress.io &lt;hello@cypress.io&gt; & Joshua &lt;data@shard.wtf&gt;
 
 Permission is hereby granted, free of charge, to any person
 obtaining a copy of this software and associated documentation
@@ -159,11 +158,8 @@ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
 
-[npm-icon]: https://nodei.co/npm/@cypress/snapshot.svg?downloads=true
-[npm-url]: https://npmjs.org/package/@cypress/snapshot
-[ci-image]: https://travis-ci.org/cypress-io/snapshot.svg?branch=master
-[ci-url]: https://travis-ci.org/cypress-io/snapshot
-[semantic-image]: https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg
+[npm-icon]: https://nodei.co/npm/@datashard/snapshot.svg?downloads=true
+[npm-url]: https://npmjs.org/package/@datashard/snapshot
 [semantic-url]: https://github.com/semantic-release/semantic-release
 [renovate-badge]: https://img.shields.io/badge/renovate-app-blue.svg
 [renovate-app]: https://renovateapp.com/

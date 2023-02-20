@@ -5,7 +5,7 @@ const api = require('.')
 const la = require('lazy-ass')
 const is = require('check-more-types')
 
-describe('@cypress/snapshot', () => {
+describe('@datashard/snapshot', () => {
   it('is an object', () => {
     la(is.object(api))
   })

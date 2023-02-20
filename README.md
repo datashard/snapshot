@@ -1,4 +1,4 @@
-# @cypress/snapshot
+# @datashard/snapshot
 
 > Adds value / object / DOM element snapshot testing support to Cypress test runner
 
@@ -30,6 +30,7 @@ After installing, add the following to your `cypress/support/commands.js` file
 ```js
 require("@cypress/snapshot").register();
 ```
+
 This registers a new command to create new snapshot or compare value to old snapshot
 
 and add the following to your `cypress.config.js`
@@ -42,7 +43,6 @@ and add the following to your `cypress.config.js`
 ```
 
 **Note:** `@cypress/snapshot` **requires** the `readFileMaybe` plugin to be included, which can be easily done using the code above
-
 
 # Usage
 
@@ -83,10 +83,10 @@ You can control snapshot comparison and behavior through a few options.
 cy.get(...).snapshot({
   snapshotName: 'Snapshot Name', // to use as a File Name
   snapshotPath: 'cypress/not_snapshots', // where to save the Snapshot
-  json: false                  // convert DOM elements into JSON 
+  json: false                  // convert DOM elements into JSON
 })                            // when storing in the snapshot file
 
-// will save as 
+// will save as
 // cypress/not_snapshots/Snapshot-Name.json
 ```
 
@@ -94,7 +94,7 @@ You can also pass a "Step Name" to the Function
 
 ```js
 cy.get(...).snapshot("Intercepted API Request")
-// will save as 
+// will save as
 // cypress/snapshots/<context>-<describe>-<it>-Intercepted-API-Request.json
 // to prevent duplications
 ```
@@ -104,10 +104,10 @@ or both
 ```js
 cy.get(...).snapshot("Intercepted API Request", {
   snapshotPath: "cypress/snapshots/api",
-  snapshotName: "first_intercept" 
+  snapshotName: "first_intercept"
 })
 
-// will save as 
+// will save as
 // cypress/snapshots/api/first_intercept.json
 ```
 
@@ -116,17 +116,18 @@ cy.get(...).snapshot("Intercepted API Request", {
 This module provides some configuration options:
 
 #### snapshotPath
+
 Sets the default Path for saving Snapshots (default: `cypress/snapshots`)
 
 ## Debugging
 
 To debug this module run with environment variable `DEBUG=@cypress/snapshot`
 
-# 
+#
 
 ### Small print
 
-Author: Gleb Bahmutov &lt;gleb@cypress.io&gt; &amp;  Joshua D. &lt;[data@shard.wtf](mailto:data@shard.wtf)&gt; &copy; Cypress.io 2017-2022
+Author: Gleb Bahmutov &lt;gleb@cypress.io&gt; &amp; Joshua D. &lt;[data@shard.wtf](mailto:data@shard.wtf)&gt; &copy; Cypress.io 2017-2022
 <br>
 License: MIT - do anything with the code, but don't blame us if it does not work.
 

@@ -23,7 +23,7 @@ npm install --save-dev @datashard/snapshot
 
 ## Import
 
-After installing, add the following to your `cypress/support/commands.js` file
+After installing, you need to add this snippet within your Cypress Support File (default: `cypress/support/e2e.{js,ts}`)
 
 ```js
 require("@datashard/snapshot").register();
@@ -31,7 +31,7 @@ require("@datashard/snapshot").register();
 
 This registers a new command to create new snapshot or compare value to old snapshot
 
-and add the following to your `cypress.config.js`
+and add the following to your `cypress.config.{js,ts}`
 
 ```js
   e2e: {
@@ -61,7 +61,7 @@ describe("my tests", () => {
 
 In the above case, you can find the stored snapshot in their own files, mentioned above them
 
-```json
+```jsonc
 // cypress/snapshots/my-tests-works-foo.json
 { "foo": 42 }
 // cypress/snapshots/my-tests-works-bar.json
@@ -81,10 +81,10 @@ You can control snapshot comparison and behavior through a few options.
 
 ```js
 cy.get(...).snapshot({
-  snapshotName: 'Snapshot Name', // to use as a File Name
-  snapshotPath: 'cypress/not_snapshots', // where to save the Snapshot
-  json: false                  // convert DOM elements into JSON
-})                            // when storing in the snapshot file
+  snapshotName: 'Snapshot Name',          // Overwrite the generated Snapshot name
+  snapshotPath: 'cypress/not_snapshots', // Overwrite where the Snapshot should be stored
+  json: false                           // convert DOM elements into JSON
+})                                     // when storing in the snapshot file
 
 // will save as
 // cypress/not_snapshots/Snapshot-Name.json
@@ -131,7 +131,7 @@ Authors:
 <br>
 License: MIT - do anything with the code, but don't blame us if it does not work.
 
-Support: If you find any problems with this module [open an issue](https://github.com/cypress-io/snapshot/issues) on Github
+Support: If you find any problems with this module [open an issue](https://github.com/datashard/snapshot/issues) on Github
 
 ## MIT License
 

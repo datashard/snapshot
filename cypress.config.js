@@ -1,7 +1,6 @@
 const { defineConfig } = require("cypress");
 const { functions } = require("./src/utils");
 
-
 module.exports = defineConfig({
   snapshot: {
     snapshotPath: "cypress/snapshots/",

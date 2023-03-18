@@ -1,7 +1,6 @@
 const stripTransientIdAttributes = require("./stripTransientIdAttributes");
 const beautify = require("js-beautify").html;
 
-
 module.exports = (el$) => {
   const html = el$[0].outerHTML;
   const stripped = stripTransientIdAttributes(html);

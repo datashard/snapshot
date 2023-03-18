@@ -20,9 +20,9 @@ module.exports = {
 
   functions: {
     register: require("./functions/register"),
-    tasks: require("./functions/addTasks")
+    tasks: require("./functions/addTasks"),
   },
   tasks: {
-    readFileMaybe
+    readFileMaybe,
   },
 };

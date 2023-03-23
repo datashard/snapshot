@@ -118,6 +118,9 @@ This module provides some configuration options:
 #### snapshotPath
 
 Sets the default Path for saving Snapshots (default: `cypress/snapshots`)
+#### `ENV` CYPRESS_UPDATE_SNAPSHOTS
+
+Lets you pass a Env Variable to update failing Tests with the new Data
 
 #
 

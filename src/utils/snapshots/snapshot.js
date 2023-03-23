@@ -41,7 +41,7 @@ const store_snapshot = (store, props = { value, name, path, raiser }) => {
 
   const expectedPath = path.join(snapshotPath, `${fileName}.json`);
   cy.task("readFileMaybe", expectedPath).then((exist) => {
-    if (exist) {
+    if (exist && !Cypress.env().SNAPSHOT_UPDATE) {
       props.raiser({ value: props.value, expected: JSON.parse(exist) });
     } else {
       cy.writeFile(expectedPath, JSON.stringify(props.value));
@@ -56,7 +56,6 @@ const set_snapshot = (
   if (!store) return;
 
   const message = Cypress._.last(snapshotName);
-  console.log("Current Snapshot name", snapshotName);
 
   const devToolsLog = { $el: serialized };
 
@@ -74,16 +73,18 @@ const set_snapshot = (
 
   const raiser = ({ value, expected }) => {
     const result = compareValues({ expected, value });
-    result.orElse((json) => {
-      devToolsLog.message = json.message;
-      devToolsLog.expected = expected;
-      delete devToolsLog.value;
-      devToolsLog.value = value;
+    if (!Cypress.env().SNAPSHOT_UPDATE && result.value) {
+      result.orElse((json) => {
+        devToolsLog.message = json.message;
+        devToolsLog.expected = expected;
+        delete devToolsLog.value;
+        devToolsLog.value = value;
 
-      throw new Error(
-        `Snapshot Difference. To update, delete snapshot file and rerun test.\n${json.message}`
-      );
-    });
+        throw new Error(
+          `Snapshot Difference.\nPlease Update the Snapshot\n\n\t${json.message}`
+        );
+      });
+    }
   };
   Cypress.log(options);
 
@@ -95,9 +96,8 @@ const set_snapshot = (
   });
 };
 
-const get_test_name = (test) => test.titlePath;
 const get_snapshot_name = (test, custom_name) => {
-  const names = get_test_name(test);
+  const names = test.titlePath;
 
   const index = custom_name;
   names.push(String(index));
@@ -110,7 +110,6 @@ module.exports = (value, step, options) => {
   if (typeof step === "object") options = step;
   if (typeof value !== "object" || Array.isArray(value))
     value = { data: value };
-  console.log("value", value);
 
   const name = get_snapshot_name(
     Cypress.currentTest,
@@ -120,7 +119,6 @@ module.exports = (value, step, options) => {
   const serialized = serializer(value);
   const store = newStore(serialized || {});
 
-  console.log({ step, options });
   set_snapshot(store, {
     snapshotName: name,
     snapshotPath: options.snapshotPath,

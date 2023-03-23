@@ -34,11 +34,16 @@
     "issues": "git-issues",
     "license": "license-checker --production --onlyunknown --csv",
     "size": "t=\"$(npm pack .)\"; wc -c \"${t}\"; tar tvf \"${t}\"; rm \"${t}\";",
+<<<<<<< HEAD
     "test": "npm run unit",
     "unit": "mocha src/*-spec.js",
     "unused-deps": "dependency-check --unused --no-dev . --entry src/index.js",
+=======
+    "unused-deps": "dependency-check --unused --no-dev . --entry src/add-initial-snapshot-file.js",
+>>>>>>> cce9ee3 (remove eslint and add cypress:update command)
     "semantic-release": "semantic-release",
     "cypress:open": "cypress open",
+    "cypress:update": "cypress run --env SNAPSHOT_UPDATE=true",
     "cypress:run": "cypress run"
   },
   "devDependencies": {

@@ -39,6 +39,7 @@
     "unused-deps": "dependency-check --unused --no-dev . --entry src/index.js",
     "semantic-release": "semantic-release",
     "cypress:open": "cypress open",
+    "cypress:update": "cypress run --env SNAPSHOT_UPDATE=true",
     "cypress:run": "cypress run"
   },
   "devDependencies": {

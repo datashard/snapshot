@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 /* global cy */
-describe("@cypress/snapshot", () => {
+describe("@datashard/snapshot", () => {
   context("simple types", () => {
     it("works with objects", () => {
       cy.fixture("File2").snapshot({
@@ -23,11 +23,19 @@ describe("@cypress/snapshot", () => {
       });
     });
 
-    it("works with arrays", () => {
-      cy.wrap([1, 2, 3]).snapshot({
-        snapshotPath: "cypress/snapshots",
-        snapshotName: "Arrays",
-      });
-    });
+    it(
+      "works with arrays",
+      {
+        env: {
+          SNAPSHOT_UPDATE: true,
+        },
+      },
+      () => {
+        cy.wrap([1, 2, 3, 4]).snapshot({
+          snapshotPath: "cypress/snapshots",
+          snapshotName: "Arrays",
+        });
+      }
+    );
   });
 });

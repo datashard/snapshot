@@ -119,7 +119,7 @@ This module provides some configuration options:
 
 Sets the default Path for saving Snapshots (default: `cypress/snapshots`)
 
-[!Config Screenshot](./.github/assets/config.png)
+![Config Screenshot](./.github/assets/config.png)
 
 #### `ENV` CYPRESS_UPDATE_SNAPSHOTS
 

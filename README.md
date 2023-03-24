@@ -115,9 +115,12 @@ cy.get(...).snapshot("Intercepted API Request", {
 
 This module provides some configuration options:
 
-#### snapshotPath
+#### snapshot.snapshotPath
 
 Sets the default Path for saving Snapshots (default: `cypress/snapshots`)
+
+[!Config Screenshot](./.github/assets/config.png)
+
 #### `ENV` CYPRESS_UPDATE_SNAPSHOTS
 
 Lets you pass a Env Variable to update failing Tests with the new Data

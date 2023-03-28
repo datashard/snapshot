@@ -1,7 +1,7 @@
 {
   "name": "@datashard/snapshot",
   "description": "Adds value / object / DOM element snapshot testing support to Cypress test runner",
-  "version": "2.1.8",
+  "version": "2.2.1",
   "author": "Joshua <data@shard.wtf>, Gleb Bahmutov <gleb@cypress.io>",
   "bugs": "https://github.com/datashard/snapshot/issues",
   "engines": {

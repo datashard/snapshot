@@ -38,7 +38,7 @@ const set_snapshot = (
 ) => {
   if (!store) return;
 
-  const devToolsLog = { $el: serialized };
+  let devToolsLog = { $el: serialized };
 
   if (Cypress.dom.isJquery(value)) {
     devToolsLog.$el = value;

@@ -64,7 +64,7 @@ const set_snapshot = (
         };
 
         throw new Error(
-          `Snapshot Difference.\nPlease Update the Snapshot\n\n\t${json.message}`
+          `Snapshot Difference found.\nPlease Update the Snapshot\n\n${json.message.replace(' ', '&nbsp;')}`
         );
       });
     }

@@ -4,7 +4,7 @@ describe("Random Describe", () => {
   context("Random Context", () => {
     it("Random It", () => {
       cy.fixture("File").snapshot("Fixture File", {
-        humanName: "Random Fixture File"
+        snapshotName: "Random Fixture File"
       });
       // cy.fixture("File2").snapshot("Fixture File",
     });

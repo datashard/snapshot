@@ -16,7 +16,7 @@ const newStore = (name) => {
   return initStore(name);
 };
 
-const store_snapshot = (store, props = { value, name, path, raiser }) => {
+const store_snapshot = (store, props = { value, name, path, raiser}) => {
   const expectedPath = path.join(
     props.path ||
       Cypress.config("snapshot").snapshotPath ||
@@ -27,7 +27,7 @@ const store_snapshot = (store, props = { value, name, path, raiser }) => {
     if (exist && !Cypress.env().SNAPSHOT_UPDATE) {
       props.raiser({ value: props.value, expected: JSON.parse(exist) });
     } else {
-      cy.writeFile(expectedPath, JSON.stringify(props.value));
+      cy.writeFile(expectedPath, JSON.stringify(props.value, null, 2));
     }
   });
 };

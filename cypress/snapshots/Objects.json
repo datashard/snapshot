@@ -1,1 +1,4 @@
-{"foo":"bar","Fizzy Drink":"Pop"}
+{
+  "foo": "bar",
+  "Fizzy Drink": "Pop"
+}

@@ -1,0 +1,9 @@
+{
+  "status": 200,
+  "response": {
+    "array": [0, 1, 2, "Three"],
+    "object": {
+      "with": "more details"
+    }
+  }
+}

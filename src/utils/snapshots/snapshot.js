@@ -16,7 +16,7 @@ const newStore = (name) => {
   return initStore(name);
 };
 
-const store_snapshot = (store, props = { value, name, path, raiser}) => {
+const store_snapshot = (store, props = { value, name, path, raiser }) => {
   const expectedPath = path.join(
     props.path ||
       Cypress.config("snapshot").snapshotPath ||
@@ -54,19 +54,29 @@ const set_snapshot = (
 
   const raiser = ({ value, expected }) => {
     const result = compareValues({ expected, value });
-    if (!Cypress.env().SNAPSHOT_UPDATE && result.value) {
-      result.orElse((json) => {
-        devToolsLog = {
-          ...devToolsLog,
-          message: json.message,
-          expected,
-          value,
-        };
 
-        throw new Error(
-          `Snapshot Difference found.\nPlease Update the Snapshot\n\n${json.message.replaceAll(' ', '&nbsp;')}`
-        );
-      });
+    if (!Cypress.env().SNAPSHOT_UPDATE && !result.success) {
+      devToolsLog = {
+        ...devToolsLog,
+        message: result,
+        expected,
+        value,
+      };
+
+      // ╺
+      // ┿
+      // ╳
+
+      throw new Error(
+        `Snapshot Difference found.\nPlease Update the Snapshot\n\n${JSON.stringify(
+          JSON.parse(result.result),
+          null,
+          2
+        )
+          .replaceAll(" ", "&nbsp;")
+          .replaceAll(/[╺┿╳]/g, "")}`
+        // `Snapshot Difference found.\nPlease Update the Snapshot\n\n${result.result}`
+      );
     }
   };
   Cypress.log(options);

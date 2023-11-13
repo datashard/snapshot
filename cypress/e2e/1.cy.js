@@ -37,5 +37,11 @@ describe("@datashard/snapshot", () => {
         });
       }
     );
+    it('works with more "complicated" Objects', () => {
+      cy.fixture("Complex").snapshot({
+        snapshotPath: 'cypress/snapshots',
+        snapshotName: "Complex"
+      })
+    })
   });
 });

@@ -45,7 +45,6 @@ function containsDiffChars(str) {
 
 const compare = (expected, value) => {
   let compareResult = "";
-  let compareSuccess = true;
 
   if (isNestedData(expected, value)) {
     if (Array.isArray(expected)) {
@@ -62,7 +61,6 @@ const compare = (expected, value) => {
 
       dataX.forEach(function (item, index) {
         const resultset = compare(item, dataY[index]);
-        compareSuccess = resultset.success;
         compareResult += resultset.result;
       });
       compareResult += `],`;
@@ -79,14 +77,11 @@ const compare = (expected, value) => {
 
       Object.keys(dataX).forEach((key) => {
         const resultset = compare(dataX[key], dataY[key]);
-
-        compareSuccess = resultset.success;
         compareResult += `"${key}": ${resultset.result}`;
       });
       compareResult += `}`;
     }
   } else {
-    compareSuccess = false;
     compareResult = checkDataState(expected, value);
   }
   let result = parseTextToJSON(compareResult);

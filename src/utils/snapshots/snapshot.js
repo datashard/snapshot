@@ -16,20 +16,40 @@ const newStore = (name) => {
   return initStore(name);
 };
 
+const writeSnapshot = (path, value) => {
+  return cy.writeFile(path, JSON.stringify(value, null, 2));
+}
+
 const store_snapshot = (store, props = { value, name, path, raiser }) => {
+  const err = {
+    mes: null
+  }
   const expectedPath = path.join(
     props.path ||
-      Cypress.config("snapshot").snapshotPath ||
-      "cypress/snapshots",
+    Cypress.config("snapshot").snapshotPath ||
+    "cypress/snapshots",
     `${props.name.join("_").replace(/ /gi, "-").replace(/\//gi, "-")}.json`
   );
-  cy.task("readFileMaybe", expectedPath).then((exist) => {
-    if (exist && !Cypress.env().SNAPSHOT_UPDATE) {
-      props.raiser({ value: props.value, expected: JSON.parse(exist) });
-    } else {
-      cy.writeFile(expectedPath, JSON.stringify(props.value, null, 2));
-    }
-  });
+
+  // cy.on('fail', (error, runnable) => {
+  //   if (error.message.includes('failed because the file does not exist at the following path')) {
+  //     err.mes = 'didNotExist'
+  //   }
+  //   writeSnapshot(expectedPath, props.value)
+  // })
+
+  try {
+    cy.readFile(expectedPath).then((file) => {
+      if (file && !Cypress.env().SNAPSHOT_UPDATE) {
+        props.raiser({ value: props.value, expected: file });
+      } else {
+        writeSnapshot(expectedPath, props.value)
+      }
+    })
+
+  } catch (error) {
+    writeSnapshot(expectedPath, props.value)
+  }
 };
 
 const set_snapshot = (
@@ -62,10 +82,6 @@ const set_snapshot = (
         expected,
         value,
       };
-
-      // ╺
-      // ┿
-      // ╳
 
       throw new Error(
         `Snapshot Difference found.\nPlease Update the Snapshot\n\n${JSON.stringify(

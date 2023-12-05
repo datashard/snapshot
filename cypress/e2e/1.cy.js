@@ -43,5 +43,15 @@ describe("@datashard/snapshot", () => {
         snapshotName: "Complex"
       })
     })
+    it('random test string',{
+      env: {
+        SNAPSHOT_UPDATE: true,
+      },
+    }, () => {
+      cy.wrap([1, 2, 3, 4]).snapshot({
+        snapshotPath: 'cypress/snapshots',
+        snapshotName: "rndmtst"
+      })
+    })
   });
 });

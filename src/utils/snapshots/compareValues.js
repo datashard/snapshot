@@ -1,5 +1,3 @@
-// const { expect: chaiExpect } = require("chai");
-
 const isNestedData = (expected, value) => {
   return (
     expected && value && typeof expected == `object` && typeof value == `object`
@@ -12,11 +10,11 @@ const checkDataState = (expected, value) => {
   if (expected === value) {
     result = `| ✅ "${value}",`;
   } else if (expected == undefined) {
-    result = `| ➖ "➖╺ ${expected}|${value}",`;
+    result = `| ➖ "➖╺ ${JSON.stringify(expected)?.replaceAll('"', "'")}|${value?.replaceAll('"', "'")}",`;
   } else if (value == undefined) {
-    result = `| ➕ "➕┿ ${expected}|${value}",`;
+    result = `| ➕ "➕┿ ${JSON.stringify(expected)?.replaceAll('"', "'")}|${value?.replaceAll('"', "'")}",`;
   } else {
-    result = `| ⭕ "⭕╳ ${expected}|${value}",`;
+    result = `| ⭕ "⭕╳ ${JSON.stringify(expected)?.replaceAll('"', "'")}|${value?.replaceAll('"', "'")}",`;
   }
 
   return result;
@@ -31,9 +29,11 @@ const checkDataState = (expected, value) => {
 
 function parseTextToJSON(text) {
   const lines = 
-  text
-  .replace(/\| [✅➖➕⭕]/g, "").trim()
-  .replace(/(.*?),\s*(\}|])/g, "$1$2");
+  // JSON.stringify(
+    text
+    .replace(/\| [✅➖➕⭕]/g, "").trim()
+    .replace(/(.*?),\s*(\}|])/g, "$1$2")
+    // )
   return lines;
   // return JSON.stringify(lines, null, 2);
 }
@@ -44,8 +44,10 @@ function containsDiffChars(str) {
 }
 
 const compare = (expected, value) => {
+ if(value === undefined){
+  throw new Error("Please provide Data to compare against.")
+ }
   let compareResult = "";
-  let compareSuccess = true;
 
   if (isNestedData(expected, value)) {
     if (Array.isArray(expected)) {
@@ -62,7 +64,6 @@ const compare = (expected, value) => {
 
       dataX.forEach(function (item, index) {
         const resultset = compare(item, dataY[index]);
-        compareSuccess = resultset.success;
         compareResult += resultset.result;
       });
       compareResult += `],`;
@@ -79,17 +80,16 @@ const compare = (expected, value) => {
 
       Object.keys(dataX).forEach((key) => {
         const resultset = compare(dataX[key], dataY[key]);
-
-        compareSuccess = resultset.success;
         compareResult += `"${key}": ${resultset.result}`;
       });
-      compareResult += `}`;
+      compareResult += `},`;
     }
   } else {
-    compareSuccess = false;
     compareResult = checkDataState(expected, value);
   }
-  let result = parseTextToJSON(compareResult);
+  let result = parseTextToJSON(compareResult).replace(/(},)$/g, `}`);
+  console.log("compareResult",compareResult)
+  console.log("result", result.replace(/(},)$/g, `}`))
   // let result = compareResult;
 
   try {

@@ -62,9 +62,9 @@ describe("my tests", () => {
 In the above case, you can find the stored snapshot in their own files, mentioned above them
 
 ```jsonc
-// cypress/snapshots/my-tests-works-foo.json
+// cypress/fixtures/snapshots/my-tests-works-foo.json
 { "foo": 42 }
-// cypress/snapshots/my-tests-works-bar.json
+// cypress/fixtures/snapshots/my-tests-works-bar.json
 { "bar": 101 }
 ```
 
@@ -82,7 +82,7 @@ You can control snapshot comparison and behavior through a few options.
 ```js
 cy.get(...).snapshot({
   snapshotName: 'Snapshot Name',          // Overwrite the generated Snapshot name
-  snapshotPath: 'cypress/not_snapshots', // Overwrite where the Snapshot should be stored
+  snapshotPath: 'cypress/fixtures/not_snapshots', // Overwrite where the Snapshot should be stored
   json: false                           // convert DOM elements into JSON
 })                                     // when storing in the snapshot file
 

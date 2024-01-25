@@ -7,7 +7,7 @@ module.exports = () => {
   lazy(is.fn(global.after), "Missing global after function");
   lazy(is.object(global.Cypress), "Missing Cypress object");
 
-  Cypress.Commands.add("snapshot", { prevSubject: true }, snapshot);
+  Cypress.Commands.add("snapshot", { prevSubject: "optional" }, snapshot);
 
   return snapshot;
 };

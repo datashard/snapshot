@@ -3,7 +3,8 @@ const { functions } = require("./src/utils");
 
 module.exports = defineConfig({
   snapshot: {
-    snapshotPath: "cypress/snapshots/",
+    // snapshotPath: "cypress/snapshots/",
+    SNAPSHOT_UPDATE: true
   },
   e2e: {
     setupNodeEvents(on, config) {

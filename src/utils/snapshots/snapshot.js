@@ -11,34 +11,36 @@ const pickSerializer = (asJson, value) => {
   return identity;
 };
 
-const store_snapshot = (props = { value, name, path, raiser }) => {
-  const expectedPath = path.join(
-    props.path ||
-      Cypress.config("snapshot").snapshotPath ||
-      "cypress/snapshots",
-    `${props.name.join("_").replace(/ /gi, "-").replace(/\//gi, "-")}.json`
-  );
-  cy.task("readFileMaybe", expectedPath).then((exist) => {
-    if (exist && !Cypress.env().SNAPSHOT_UPDATE) {
-      props.raiser({ value: props.value, expected: JSON.parse(exist) });
-    } else {
-      cy.writeFile(expectedPath, JSON.stringify(props.value, null, 2));
-    }
-  });
+const store_snapshot = (props = { value, name, raiser }) => {
+  if (!Cypress.env().SNAPSHOT_UPDATE) {
+    cy.fixture(props.name).then(content => props.raiser({ value: props.value, expected: content }))
+  } else {
+    cy.writeFile(`${props.name}.json`, JSON.stringify(props.value.null, 2))
+  }
+
+
+  // cy.fixture(props.name)
+  //   .then(exist => {
+  //     cy.log('fixture 2')
+  //     if (exist && !Cypress.env().SNAPSHOT_UPDATE) {
+  //       cy.log(`fixture exists and doesn't update`)
+  //       props.raiser({ value: props.value, expected: exist, type: "fixture" });
+  //     } else {
+  //       cy.log(`fixture exists and updates`)
+  //       cy.writeFile(expectedPath, JSON.stringify(props.value, null, 2));
+  //     }
+  //   })
 };
 
-const set_snapshot = (
-  { snapshotName, snapshotPath, serialized, value }
-) => {
+const set_snapshot = ({ snapshotName, serialized, value }) => {
   let devToolsLog = { $el: serialized };
-
   if (Cypress.dom.isJquery(value)) {
     devToolsLog.$el = value;
   }
 
   const options = {
     name: "snapshot",
-    message: Cypress._.last(snapshotName),
+    message: snapshotName,
     consoleProps: () => devToolsLog,
   };
 
@@ -46,7 +48,6 @@ const set_snapshot = (
 
   const raiser = ({ value, expected }) => {
     const result = compareValues({ expected, value });
-
     if (!Cypress.env().SNAPSHOT_UPDATE && !result.success) {
       devToolsLog = {
         ...devToolsLog,
@@ -55,19 +56,11 @@ const set_snapshot = (
         value,
       };
 
-      // ╺
-      // ┿
-      // ╳
-
       throw new Error(
-        `Snapshot Difference found.\nPlease Update the Snapshot\n\n${JSON.stringify(
-          JSON.parse(result.result),
-          null,
-          2
-        )
-          .replaceAll(" ", "&nbsp;")
-          .replaceAll(/[╺┿╳]/g, "")}`
-        // `Snapshot Difference found.\nPlease Update the Snapshot\n\n${result.result}`
+        `Snapshot Difference found.\nPlease Update the Snapshot\n
+        
+
+        ${JSON.stringify(result.result.replaceAll(/[╺┿╳]/g, ""), null, 2)}`
       );
     }
   };
@@ -76,35 +69,28 @@ const set_snapshot = (
   store_snapshot({
     value,
     name: snapshotName,
-    path: snapshotPath,
     raiser,
   });
 };
 
-const get_snapshot_name = (test, custom_name) => {
-  const names = test.titlePath;
+const get_snapshot_name = (asFolder, stepName) => {
+  const names = Cypress.currentTest.titlePath;
+  const sep = ">>datashard.work<<"
+  if (stepName) names.push(stepName)
 
-  const index = custom_name;
-  names.push(String(index));
-
-  if (custom_name) return [custom_name];
-  return names;
+  if (asFolder) return names.join(sep).replace(/ /gi, "-").replace(/\//gi, "-").replaceAll(sep, '/')
+  else return names.join('__').replaceAll(" ", "-").replaceAll("/", "-")
 };
 
-module.exports = (value, step, options) => {
-  if (typeof step === "object") options = step;
+module.exports = (value, stepName, options = { json: true, asFolder: false }) => {
   if (typeof value !== "object" || Array.isArray(value))
     value = { data: value };
-
   const serializer = pickSerializer(options.json, value);
   const serialized = serializer(value);
-  
   set_snapshot({
-    snapshotName: get_snapshot_name(
-      Cypress.currentTest,
-      options.snapshotName || step
-    ),
-    snapshotPath: options.snapshotPath,
+    snapshotName: path.join(
+      options.snapshotPath || Cypress.config('snapshot').snapshotPath || 'snapshots',
+      `/${get_snapshot_name(options.asFolder, stepName)}`),
     serialized,
     value,
   });

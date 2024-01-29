@@ -1,2 +1,2 @@
 // register .snapshot() command
-require('../..').register()
+require('../../src/index').register()

@@ -12,7 +12,7 @@ const pickSerializer = (asJson, value) => {
 };
 
 const store_snapshot = (props = { value, name, raiser }) => {
-  if (Cypress.env().SNAPSHOT_UPDATE || Cypress.config('snapshot').SNAPSHOT_UPDATE) {
+  if (Cypress.env().updateSnapshots || Cypress.config('snapshot').updateSnapshots) {
     cy.log(props.name)
     console.log(props.name)
     cy.writeFile(`${props.name}.json`, JSON.stringify(props.value, null, 2))
@@ -39,7 +39,7 @@ const set_snapshot = ({ snapshotName, serialized, value }) => {
 
   const raiser = ({ value, expected }) => {
     const result = compareValues({ expected, value });
-    if (!Cypress.env().SNAPSHOT_UPDATE && !result.success) {
+    if ((!Cypress.env().updateSnapshots || !Cypress.config('snapshot').updateSnapshots) && !result.success) {
       devToolsLog = {
         ...devToolsLog,
         message: result,

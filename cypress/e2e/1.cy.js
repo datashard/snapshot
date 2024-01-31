@@ -2,7 +2,7 @@
 /* global cy */
 describe("datashard/snapshot", () => {
   context("simple types"
-    // , { env: { SNAPSHOT_UPDATE: true } }
+    // , { env: { updateSnapshots: true } }
     , () => {
       it("works with objects", () => {
         cy.wrap({
@@ -29,7 +29,7 @@ describe("datashard/snapshot", () => {
         "works with arrays",
         {
           env: {
-            SNAPSHOT_UPDATE: true,
+            updateSnapshots: true,
           },
         },
         () => {

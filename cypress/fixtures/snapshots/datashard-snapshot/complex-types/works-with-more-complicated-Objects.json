@@ -5,10 +5,9 @@
       0,
       1,
       2,
-      "Three"
+      "4"
     ],
-    "object": {
-      "with": "more details"
-    }
-  }
+    "object": {}
+  },
+  "thisisnew": "wtf"
 }

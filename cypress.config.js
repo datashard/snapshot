@@ -3,7 +3,7 @@ const { defineConfig } = require("cypress");
 module.exports = defineConfig({
   
   snapshot: {
-    updateSnapshots: true,
+    // updateSnapshots: true,
     useFolders: true,
   },
 

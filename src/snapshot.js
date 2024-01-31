@@ -11,10 +11,16 @@ const pickSerializer = (asJson, value) => {
   return identity;
 };
 
+/**
+ * 
+ * @param {string} text 
+ * @returns {string}
+ */
+
+const parseTextToJSON = (text) => text.replace(/\| [✅➖➕⭕]/g, "").trim().replace(/(.*?),\s*(\}|])/g, "$1$2").replace(/},(?!")$/g, "}");
+
 const store_snapshot = (props = { value, name, raiser }) => {
   if (Cypress.env().updateSnapshots || Cypress.config('snapshot').updateSnapshots) {
-    cy.log(props.name)
-    console.log(props.name)
     cy.writeFile(`${props.name}.json`, JSON.stringify(props.value, null, 2))
   } else {
     // TODO: Figure out how to replace the fixture folder name if people move it 
@@ -39,6 +45,7 @@ const set_snapshot = ({ snapshotName, serialized, value }) => {
 
   const raiser = ({ value, expected }) => {
     const result = compareValues({ expected, value });
+    // console.log("Final Result", result.result)
     if ((!Cypress.env().updateSnapshots || !Cypress.config('snapshot').updateSnapshots) && !result.success) {
       devToolsLog = {
         ...devToolsLog,
@@ -49,10 +56,13 @@ const set_snapshot = ({ snapshotName, serialized, value }) => {
 
       throw new Error(
         `Snapshot Difference found.\nPlease Update the Snapshot\n
-        
 
-        ${JSON.stringify(result.result.replaceAll(/[╺┿╳]/g, ""), null, 2)}`
-      );
+        ${JSON.stringify(
+          JSON.parse(parseTextToJSON(result.result).replaceAll(/[╺┿╳]/g, "")), null, 2)
+          .replaceAll(" ", "&nbsp;")
+        }
+
+        `);
     }
   };
   Cypress.log(options);

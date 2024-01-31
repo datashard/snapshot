@@ -48,13 +48,13 @@ describe("datashard/snapshot", () => {
         cy.wrap({
           "status": 200,
           "response": {
-            "array": [0, 1, 2, "Three"],
+            "array": [0, 1, 2, "4"],
             "object": {
-              "with": "more details"
+              // "with": "more details"
             }
-          }
-        }
-        ).snapshot()
+          },
+          "thisisnew": "wtf"
+        }).snapshot()
       })
       it("works based on fixtures", () => {
         cy

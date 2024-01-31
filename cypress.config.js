@@ -1,9 +1,9 @@
 const { defineConfig } = require("cypress");
 
 module.exports = defineConfig({
+  
   snapshot: {
-    // snapshotPath: "cypress/snapshots/",
-    // SNAPSHOT_UPDATE: true,
+    updateSnapshots: true,
     useFolders: true,
   },
 

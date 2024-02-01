@@ -37,7 +37,7 @@
     "cypress:run": "cypress run"
   },
   "devDependencies": {
-    "cypress": "10.6.0",
+    "cypress": "12.13.0",
     "debug": "3.2.7",
     "dependency-check": "2.10.1"
   },

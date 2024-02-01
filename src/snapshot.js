@@ -17,7 +17,7 @@ const pickSerializer = (asJson, value) => {
  * @returns {string}
  */
 
-const parseTextToJSON = (text) => text.replace(/\| [✅➖➕⭕]/g, "").trim().replace(/(.*?),\s*(\}|])/g, "$1$2").replace(/},(?!")$/g, "}");
+const parseTextToJSON = (text) => text.replace(/\| [✅➖➕⭕]/g, "").trim().replace(/(.*?),\s*(\}|])/g, "$1$2").replace(/},(?!")$/g, "}").replaceAll(/[╺┿╳]/g, "")
 
 const store_snapshot = (props = { value, name, raiser }) => {
   if (Cypress.env().updateSnapshots || Cypress.config('snapshot').updateSnapshots) {
@@ -35,36 +35,33 @@ const set_snapshot = ({ snapshotName, serialized, value }) => {
     devToolsLog.$el = value;
   }
 
-  const options = {
-    name: "snapshot",
-    message: snapshotName,
-    consoleProps: () => devToolsLog,
-  };
 
-  if (value) options.$el = value;
 
   const raiser = ({ value, expected }) => {
     const result = compareValues({ expected, value });
     // console.log("Final Result", result.result)
     if ((!Cypress.env().updateSnapshots || !Cypress.config('snapshot').updateSnapshots) && !result.success) {
-      devToolsLog = {
-        ...devToolsLog,
-        message: result,
-        expected,
-        value,
+      devToolsLog = () => {
+        return { expected, value }
       };
 
-      throw new Error(
-        `Snapshot Difference found.\nPlease Update the Snapshot\n
+      const error = (inError) => `
+      Snapshot Difference found.\nPlease Update the Snapshot ${inError ? `\n${JSON.stringify(JSON.parse(parseTextToJSON(result.result)), null, 3).replaceAll(' ', "&nbsp;")}` : ""}`
 
-        ${JSON.stringify(
-          JSON.parse(parseTextToJSON(result.result).replaceAll(/[╺┿╳]/g, "")), null, 2)
-          .replaceAll(" ", "&nbsp;")
-        }
+      Cypress.log({ message: error(true) })
 
-        `);
+      throw new Error(error());
     }
   };
+
+  let options = {
+    name: "snapshot",
+    message: snapshotName,
+    consoleProps: () => { return devToolsLog },
+  };
+
+  if (value) options.$el = value;
+
   Cypress.log(options);
 
   store_snapshot({

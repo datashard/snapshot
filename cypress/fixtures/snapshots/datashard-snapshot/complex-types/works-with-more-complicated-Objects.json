@@ -7,7 +7,9 @@
       2,
       "4"
     ],
-    "object": {}
+    "object": {
+      "with": "more details"
+    }
   },
   "thisisnew": "wtf"
 }

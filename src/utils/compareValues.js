@@ -30,9 +30,6 @@ const compare = (expected, value) => {
         dataY = expected;
       }
 
-      console.log('datax', dataX)
-      console.log('dataY', dataY)
-
       dataX.forEach(function (item, index) {
         const resultset = compare(item, dataY[index]);
         compareResult += resultset.result;

@@ -21,6 +21,7 @@ const parseTextToJSON = (text) => text.replace(/\| [✅➖➕⭕]/g, "").trim().
 
 const store_snapshot = (props = { value, name, raiser }) => {
   if (Cypress.env().updateSnapshots || Cypress.config('snapshot').updateSnapshots) {
+    cy.SNAPSHOT_prettyprint({ title: "INFO", type: "info", message: "Saving Snapshot" })
     cy.writeFile(`${props.name}.json`, JSON.stringify(props.value, null, 2))
   } else {
     // TODO: Figure out how to replace the fixture folder name if people move it 
@@ -35,11 +36,16 @@ const set_snapshot = ({ snapshotName, serialized, value }) => {
     devToolsLog.$el = value;
   }
 
+  let options = {
+    name: "snapshot",
+    message: snapshotName,
+    consoleProps: () => { return devToolsLog },
+  };
 
+  if (value) options.$el = value;
 
   const raiser = ({ value, expected }) => {
     const result = compareValues({ expected, value });
-    // console.log("Final Result", result.result)
     if ((!Cypress.env().updateSnapshots || !Cypress.config('snapshot').updateSnapshots) && !result.success) {
       devToolsLog = () => {
         return { expected, value }
@@ -51,18 +57,16 @@ const set_snapshot = ({ snapshotName, serialized, value }) => {
       Cypress.log({ message: error(true) })
 
       throw new Error(error());
+    } else {
+      cy.SNAPSHOT_prettyprint({
+        title: "SUCCESS",
+        message: snapshotName,
+        type: "success"
+      })
     }
   };
 
-  let options = {
-    name: "snapshot",
-    message: snapshotName,
-    consoleProps: () => { return devToolsLog },
-  };
 
-  if (value) options.$el = value;
-
-  Cypress.log(options);
 
   store_snapshot({
     value,

@@ -50,7 +50,7 @@ describe("datashard/snapshot", () => {
           "response": {
             "array": [0, 1, 2, "4"],
             "object": {
-              // "with": "more details"
+              "with": "more details"
             }
           },
           "thisisnew": "wtf"

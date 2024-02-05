@@ -51,7 +51,7 @@ baseStyles.forEach((style) => {
 * // Create a custom log with name "misc" and base color "#9333ea"
 * createCustomLog("misc", "#9333ea")
 */
-export function createCustomLog(name, baseColor) {
+function createCustomLog(name, baseColor) {
   if (!name || !baseColor) {
       throw new Error('Missing parameters')
   }

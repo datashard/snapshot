@@ -116,5 +116,4 @@ module.exports = () => {
   Cypress.Commands.add("snapshot", { prevSubject: "optional" }, snapshot);
   Cypress.Commands.add('SNAPSHOT_prettyprint', cyPrint)
 
-  return Cypress;
 };

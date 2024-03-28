@@ -22,9 +22,10 @@ const parseTextToJSON = (text) => text.replace(/\| [✅➖➕⭕]/g, "").trim().
 const store_snapshot = (props = { value, name, raiser }) => {
   if (Cypress.env().updateSnapshots || Cypress.config('snapshot').updateSnapshots) {
     cy.SNAPSHOT_prettyprint({ title: "INFO", type: "info", message: "Saving Snapshot" })
-    cy.writeFile(`${props.name}.json`, JSON.stringify(props.value, null, 2))
+    cy.writeFile(`${Cypress.env().fixturesFolder}/${props.name}.json`, JSON.stringify(props.value, null, 2))
   } else {
     // TODO: Figure out how to replace the fixture folder name if people move it 
+    // const fixtureName = props.name.replace(Cypress.env().fixturesFolder, "")
     const fixtureName = props.name.replace("cypress/fixtures", "")
     cy.fixture(fixtureName).then(content => props.raiser({ value: props.value, expected: content }))
   }

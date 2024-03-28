@@ -28,7 +28,7 @@ This will register a new Command `.snapshot()`, to create new Snapshots and once
 ## Config
 You can pass `updateSnapshots` and `useFolders` as options in the `cypress.config.js` file
 
-<!-- ![Example Settings for the Module](./.github/assets/config.png) -->
+![Example Settings for the Module](./.github/assets/config.png)
 
 Alternatively, you can also add `snapshotUpdate` as an Environment Variable to update your snapshots.
 
@@ -76,3 +76,4 @@ If a step wasn't named, it will instead use the `<It>`for the file name, though 
 
 Of course, if a value changed, it will no longer match the snapshot and throw an Error.
 ![](./.github/assets/Error.png)
+

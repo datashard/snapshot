@@ -1,0 +1,15 @@
+{
+  "status": 200,
+  "response": {
+    "array": [
+      0,
+      1,
+      2,
+      "4"
+    ],
+    "object": {
+      "with": "more details"
+    }
+  },
+  "thisisnew": "wtf"
+}

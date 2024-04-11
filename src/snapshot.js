@@ -22,12 +22,9 @@ const parseTextToJSON = (text) => text.replace(/\| [✅➖➕⭕]/g, "").trim().
 const store_snapshot = (props = { value, name, raiser }) => {
   if (Cypress.env().updateSnapshots || Cypress.config('snapshot').updateSnapshots) {
     cy.SNAPSHOT_prettyprint({ title: "INFO", type: "info", message: "Saving Snapshot" })
-    cy.writeFile(`${Cypress.env().fixturesFolder}/${props.name}.json`, JSON.stringify(props.value, null, 2))
+    cy.writeFile(path.join(Cypress.config().fixturesFolder,`${props.name}.json`), JSON.stringify(props.value, null, 2))
   } else {
-    // TODO: Figure out how to replace the fixture folder name if people move it 
-    // const fixtureName = props.name.replace(Cypress.env().fixturesFolder, "")
-    const fixtureName = props.name.replace("cypress/fixtures", "")
-    cy.fixture(fixtureName).then(content => props.raiser({ value: props.value, expected: content }))
+    cy.fixture(props.name).then(content => props.raiser({ value: props.value, expected: content }))
   }
 };
 
@@ -115,9 +112,7 @@ module.exports = (value, stepName, options = { json: true }) => {
   options.asFolder = Cypress.config('snapshot').useFolders || false
 
   set_snapshot({
-    snapshotName: path.join(
-      options.snapshotPath || Cypress.config('snapshot').snapshotPath || 'cypress/fixtures/snapshots',
-      `/${get_snapshot_name(options.asFolder, stepName)}`),
+    snapshotName: `/${get_snapshot_name(options.asFolder, stepName)}`,
     serialized,
     value,
   });

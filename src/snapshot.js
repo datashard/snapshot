@@ -19,12 +19,12 @@ const pickSerializer = (asJson, value) => {
 
 const parseTextToJSON = (text) => text.replace(/\| [✅➖➕⭕]/g, "").trim().replace(/(.*?),\s*(\}|])/g, "$1$2").replace(/},(?!")$/g, "}").replaceAll(/[╺┿╳]/g, "")
 
-const store_snapshot = (props = { value, name, raiser }) => {
+const store_snapshot = ({ value, name, raiser } = { value, name, raiser }) => {
   if (Cypress.env().updateSnapshots || Cypress.config('snapshot').updateSnapshots) {
     cy.SNAPSHOT_prettyprint({ title: "INFO", type: "info", message: "Saving Snapshot" })
-    cy.writeFile(path.join(Cypress.config().fixturesFolder,`${props.name}.json`), JSON.stringify(props.value, null, 2))
+    cy.writeFile(path.join(Cypress.config().fixturesFolder, `${name}.json`), JSON.stringify(value, null, 2))
   } else {
-    cy.fixture(props.name).then(content => props.raiser({ value: props.value, expected: content }))
+    cy.fixture(name).then(expected => raiser({ value, expected }))
   }
 };
 
@@ -38,9 +38,8 @@ const set_snapshot = ({ snapshotName, serialized, value }) => {
     name: "snapshot",
     message: snapshotName,
     consoleProps: () => { return devToolsLog },
+    ...(value && { $el: value })
   };
-
-  if (value) options.$el = value;
 
   const raiser = ({ value, expected }) => {
     const result = compareValues({ expected, value });

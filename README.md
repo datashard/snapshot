@@ -34,11 +34,9 @@ Alternatively, you can also add `snapshotUpdate` as an Environment Variable to u
 
 Simply pass `--env updateSnapshots=true` when running Cypress.
 
-> If you don't use the default fixture folder, you will also need to add `snapshotPath` to this module's config with the same path you use for `fixtureFolder`.
-
 ## Usage
 
-If properly added, usage of this plugin is rather simple, simply add `.snapshot()` to cypress functions that return valid JSON.
+If properly added, usage of this plugin is rather simple, just add `.snapshot()` to cypress functions that return valid JSON. (i.e. `cy.wrap`)
 
 ### Example
 ```js
@@ -64,16 +62,22 @@ cypress/fixtures/snapshots/my-tests/works/bar.json
 
 ```
 
-Snapshots will generally be saved using this convention, provided by Cypress:
+Snapshots will generally be saved using this convention, provided by the Cypress Test Steps:
+Passing a name to the Snapshot function is required, but not checked, if you want to take multiple snapshots in the same block. 
 
+If you have two Snapshots in the same Block, the last one ***WILL*** overwrite the previous one while updating and the then updated Test will fail on the first snapshot. 
 ```
 {fixtureFolder}/<Context>-<Describe>-<It>-<Name?>.json
 {fixtureFolder}/<Context>/<Describe>/<It>/<Name?>.json
 ```
 
-If a step wasn't named, it will instead use the `<It>`for the file name, though this means that you will not be able to have more than 1 Snapshot in your It Block, as it would overwrite the previously created Snapshot files.
 
+While running your Tests, if a value changed, it will, of course, no longer match the snapshot and throw an Error.
 
-Of course, if a value changed, it will no longer match the snapshot and throw an Error.
+Which looks like this:
+
 ![](./.github/assets/Error.png)
 
+When the Test succeeds, it will instead log a Success in the Log and let you know where the File has been saved to, relative to the Fixture Snapshot Folder
+
+![](./.github/assets/Correct.png)

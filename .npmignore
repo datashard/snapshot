@@ -1,3 +1,4 @@
 cypress/
 cypress.config.js
 .github/workflows/
+.vscode/

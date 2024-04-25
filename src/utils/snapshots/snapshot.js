@@ -1,7 +1,6 @@
 const serializeDomElement = require("../serializers/serializeDomElement");
 const serializeToHTML = require("../serializers/serializeToHTML");
 const compareValues = require("./compareValues");
-const { initStore } = require("snap-shot-store");
 const path = require("path");
 const identity = (x) => x;
 
@@ -12,11 +11,7 @@ const pickSerializer = (asJson, value) => {
   return identity;
 };
 
-const newStore = (name) => {
-  return initStore(name);
-};
-
-const store_snapshot = (store, props = { value, name, path, raiser }) => {
+const store_snapshot = (props = { value, name, path, raiser }) => {
   const expectedPath = path.join(
     props.path ||
       Cypress.config("snapshot").snapshotPath ||
@@ -33,11 +28,8 @@ const store_snapshot = (store, props = { value, name, path, raiser }) => {
 };
 
 const set_snapshot = (
-  store,
   { snapshotName, snapshotPath, serialized, value }
 ) => {
-  if (!store) return;
-
   let devToolsLog = { $el: serialized };
 
   if (Cypress.dom.isJquery(value)) {
@@ -81,7 +73,7 @@ const set_snapshot = (
   };
   Cypress.log(options);
 
-  store_snapshot(store, {
+  store_snapshot({
     value,
     name: snapshotName,
     path: snapshotPath,
@@ -106,9 +98,8 @@ module.exports = (value, step, options) => {
 
   const serializer = pickSerializer(options.json, value);
   const serialized = serializer(value);
-  const store = newStore(serialized || {});
-
-  set_snapshot(store, {
+  
+  set_snapshot({
     snapshotName: get_snapshot_name(
       Cypress.currentTest,
       options.snapshotName || step

@@ -1,7 +1,6 @@
 // global cy, Cypress
-const { functions } = require("./utils/index");
+const register = require("./register");
 
 module.exports = {
-  register: functions.register,
-  tasks: functions.tasks,
+  register
 };

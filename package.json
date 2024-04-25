@@ -1,8 +1,8 @@
 {
   "name": "@datashard/snapshot",
-  "description": "Adds value / object / DOM element snapshot testing support to Cypress test runner",
-  "version": "2.3.2",
-  "author": "Joshua <data@shard.wtf>, Gleb Bahmutov <gleb@cypress.io>",
+  "description": "Adds JSON Snapshot testing support to Cypress",
+  "version": "3.0.0-beta",
+  "author": "Joshua <data@shard.wtf>",
   "bugs": "https://github.com/datashard/snapshot/issues",
   "engines": {
     "node": ">=6"
@@ -13,13 +13,13 @@
     "src/*/**",
     "!src/*-spec.js"
   ],
-  "homepage": "https://github.com/datashard/snapshot#readme",
+  "homepage": "https://shard.wtf/snapshot",
   "keywords": [
     "cypress",
     "cypress-io",
     "plugin",
     "snapshot",
-    "testing"
+    "testing", "json"
   ],
   "license": "MIT",
   "main": "src/index.js",
@@ -33,11 +33,11 @@
     "unused-deps": "dependency-check --unused --no-dev . --entry src/index.js",
     "semantic-release": "semantic-release",
     "cypress:open": "cypress open",
-    "cypress:update": "cypress run --env SNAPSHOT_UPDATE=true",
+    "cypress:update": "cypress run --env updateSnapshots=true",
     "cypress:run": "cypress run"
   },
   "devDependencies": {
-    "cypress": "10.6.0",
+    "cypress": "12.13.0",
     "debug": "3.2.7",
     "dependency-check": "2.10.1"
   },

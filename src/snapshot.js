@@ -108,10 +108,16 @@ module.exports = (value, stepName, options = { json: true }) => {
     value = { data: value };
   const serializer = pickSerializer(options.json, value);
   const serialized = serializer(value);
+  let useFolders; 
+  if(Cypress.config('snapshot').useSnapshotFolder === undefined || Cypress.config('snapshot').useSnapshotFolder === true) {
+    useFolders = true
+  } else {
+    useFolders = false
+  }
   options.asFolder = Cypress.config('snapshot').useFolders || false
 
   set_snapshot({
-    snapshotName: `/${get_snapshot_name(options.asFolder, stepName)}`,
+    snapshotName: `/${useFolders ? "snapshots/" : ""}${get_snapshot_name(options.asFolder, stepName)}`,
     serialized,
     value,
   });

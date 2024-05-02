@@ -5,6 +5,7 @@ module.exports = defineConfig({
   snapshot: {
     // updateSnapshots: true,
     useFolders: true,
+    // useSnapshotFolder: true
   },
 
   e2e: {

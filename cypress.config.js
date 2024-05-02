@@ -1,13 +1,16 @@
 const { defineConfig } = require("cypress");
-const { functions } = require("./src/utils");
 
 module.exports = defineConfig({
+  // fixturesFolder: "cypress/fixtures",
   snapshot: {
-    snapshotPath: "cypress/snapshots/",
+    // updateSnapshots: true,
+    useFolders: true,
+    // useSnapshotFolder: true
   },
+
   e2e: {
     setupNodeEvents(on, config) {
-      functions.tasks(on, config);
+      // implement node event listeners here
     },
   },
 });

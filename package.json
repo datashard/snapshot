@@ -13,13 +13,13 @@
     "src/*/**",
     "!src/*-spec.js"
   ],
-  "homepage": "https://github.com/datashard/snapshot#readme",
+  "homepage": "https://shard.wtf/snapshot",
   "keywords": [
     "cypress",
     "cypress-io",
     "plugin",
     "snapshot",
-    "testing"
+    "testing", "json"
   ],
   "license": "MIT",
   "main": "src/index.js",
@@ -33,11 +33,11 @@
     "unused-deps": "dependency-check --unused --no-dev . --entry src/index.js",
     "semantic-release": "semantic-release",
     "cypress:open": "cypress open",
-    "cypress:update": "cypress run --env SNAPSHOT_UPDATE=true",
+    "cypress:update": "cypress run --env updateSnapshots=true",
     "cypress:run": "cypress run"
   },
   "devDependencies": {
-    "cypress": "10.6.0",
+    "cypress": "12.13.0",
     "debug": "3.2.7",
     "dependency-check": "2.10.1"
   },
